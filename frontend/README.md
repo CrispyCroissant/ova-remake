@@ -1,7 +1,3 @@
-# Öviks VägAssistance Website
-
-A website for Öviks VägAssistance
-
 ## Install the dependencies
 
 ```bash
