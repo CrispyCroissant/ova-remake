@@ -1,0 +1,51 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/backend/src/server.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/backend/src/server.js\"",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix",
+    "format:check": "prettier --check \"src\" \"__test__\"",
+    "format:all": "prettier --write \"src\" \"__test__\"",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^3.12.0",
+    "axios": "^0.26.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "pino": "^7.11.0",
+    "pino-http": "^7.0.0",
+    "stripe": "^8.218.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.24",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
+    "concurrently": "^7.1.0",
+    "dotenv": "^16.0.0",
+    "eslint": "^8.13.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
+    "jest": "^27.5.1",
+    "jest-mock-extended": "^2.0.5",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.6.2",
+    "prisma": "^3.12.0",
+    "supertest": "^6.2.2",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.6.3"
+  }
+}
