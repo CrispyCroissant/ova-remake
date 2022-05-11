@@ -1,0 +1,8 @@
+# Folders
+node_modules
+dist
+.vscode
+__test__
+
+# Ignore test files
+**/*.spec.ts
