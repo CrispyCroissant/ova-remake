@@ -58,7 +58,7 @@ async function processPayment(req: Request, res: Response): Promise<Response> {
 
   await handleEvent(event);
 
-  return res.send(200);
+  return res.sendStatus(200);
 }
 
 export default { createIntent, processPayment };
