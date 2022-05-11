@@ -9,7 +9,7 @@ import logger from './config/logger';
 
 const app: Express = express();
 
-app.use(pino(logger));
+app.use(pino({ ...logger, enabled: process.env.NODE_ENV !== 'test' }));
 app.use(
   express.json({
     verify: (req, _, buf) => {
