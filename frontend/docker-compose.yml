@@ -1,0 +1,15 @@
+version: '3'
+services:
+  frontend:
+    image: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - '9000:9000'
+    working_dir: /root
+    volumes:
+      - ./src:/root/src
+      - ./test:/root/test
+      - /root/node_modules
