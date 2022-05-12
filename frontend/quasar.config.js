@@ -63,12 +63,7 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      env: {
-        BACKEND_URL: 'http://localhost:3000',
-        STRIPE_API_KEY:
-          'pk_test_51KrMCbFtqUBRqj820RtvjP8YEPdQ9rgSEe6PIQcfrsh9tvuUeVV0f5RHyuUCJXVL9MhZQz70BvhkXfMuPmPlXMRZ00uZojYC97',
-        GOOGLE_API_KEY: 'AIzaSyBn3e_LAHIpXDefHH7oqoahi5o8i3cnBwA',
-      },
+      env: require('dotenv').config().parsed,
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
