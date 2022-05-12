@@ -1,0 +1,49 @@
+version: '3'
+services:
+  backend:
+    image: backend
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    depends_on:
+      - postgres
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./src:/backend/src # TODO: Find a nice way to exclude test files
+      - ./__test__:/backend/__test__ # TODO: Remove when above is fixed
+      - /backend/node_modules
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    depends_on:
+      - postgres
+    ports:
+      - '5555:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    hostname: postgres
+    ports:
+      - 5444:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ova
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  pgadmin-data:

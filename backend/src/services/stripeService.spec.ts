@@ -1,6 +1,9 @@
+import { PrismaClient } from '@prisma/client';
+import { DeepMockProxy, mockDeep, mockReset } from 'jest-mock-extended';
 import Stripe from 'stripe';
 import { BackendError } from '../../../shared/BackendError';
 import { ErrorCodes } from '../../../shared/enums';
+import prisma from '../config/prismaInstance';
 import { OrderStatus } from '../types/orderStatuses';
 import * as orderService from './orderService';
 import { createPaymentIntent, handleEvent } from './stripeService';
@@ -17,7 +20,18 @@ jest.mock('stripe', () => {
 
 jest.mock('./orderService');
 
+jest.mock('../config/prismaInstance', () => ({
+  __esModule: true,
+  default: mockDeep<PrismaClient>(),
+}));
+
+const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>;
+
 describe('createPaymentIntent', () => {
+  beforeEach(() => {
+    mockReset(prismaMock);
+  });
+
   it("returns an error if order wasn't found", async () => {
     jest.spyOn(orderService, 'findOrder').mockRejectedValueOnce(new Error());
 

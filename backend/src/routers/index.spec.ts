@@ -252,6 +252,11 @@ describe('POST /api/stripe-webhook', () => {
     object: 'event',
   };
 
+  beforeAll(() => {
+    jest.mock('../services/orderService');
+    jest.spyOn(orderService, 'updateOrderStatus').mockResolvedValue();
+  });
+
   it('returns an error if no event was given', async () => {
     const res = await request(app).post(url).send();
     expect(res.status).toBe(400);
