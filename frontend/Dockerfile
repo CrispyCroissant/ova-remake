@@ -14,6 +14,9 @@ RUN mkdir node_modules/.q-cache && chmod -R 777 node_modules/.q-cache
 COPY shared ../shared
 COPY . .
 
+# Remove shared folder from working directory
+RUN rm -rf shared
+
 EXPOSE 9000
 
 
