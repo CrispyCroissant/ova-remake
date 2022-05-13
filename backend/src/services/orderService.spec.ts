@@ -55,6 +55,7 @@ describe('createOrder', () => {
 
   beforeEach(() => {
     mockReset(prismaMock);
+    jest.resetAllMocks();
   });
 
   it("throws an error if the order couldn't be saved", async () => {
@@ -93,6 +94,8 @@ describe('createOrder', () => {
   });
 
   it('sends an email if order is valid', async () => {
+    prismaMock.order.create.mockResolvedValueOnce(mockDBOrder);
+
     await createOrder(mockFareParam, mockCustomerParam);
     expect(mockMailService.sendEmail).toBeCalled();
   });
