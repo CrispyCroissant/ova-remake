@@ -21,14 +21,14 @@ function priceCalc(distance: number): number {
 function createMessage(
   customer: Customer,
   fare: Fare,
+  orderId: number,
   status: OrderStatus
 ): string {
   const { firstName, lastName, address, city, email, phone } = customer;
   const { from, to, price, tax, date, distance } = fare;
 
   return `
-    Beställning
-
+    ID: ${orderId}
     Status: ${status}
     Pris: ${price} (moms: ${tax})
     
