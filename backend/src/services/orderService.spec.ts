@@ -11,13 +11,17 @@ import prisma from '../config/prismaInstance';
 import { BackendError } from '../../../shared/BackendError';
 import { ErrorCodes } from '../../../shared/enums';
 import { OrderStatus } from '../types/orderStatuses';
+import * as mailService from './mailService';
 
 jest.mock('../config/prismaInstance', () => ({
   __esModule: true,
   default: mockDeep<PrismaClient>(),
 }));
 
+jest.mock('./mailService');
+
 const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>;
+const mockMailService = jest.mocked(mailService);
 
 describe('createOrder', () => {
   const mockFareParam: Fare = {
@@ -51,17 +55,30 @@ describe('createOrder', () => {
 
   beforeEach(() => {
     mockReset(prismaMock);
+    jest.resetAllMocks();
   });
 
   it("throws an error if the order couldn't be saved", async () => {
     prismaMock.order.create.mockRejectedValueOnce(new Error());
 
+    expect.assertions(2);
     try {
       await createOrder(mockFareParam, mockCustomerParam);
     } catch (err: unknown) {
       const error = err as BackendError;
       expect(error.HTTPStatus).toBe(500);
       expect(error.errorCode).toBe(ErrorCodes.DB_CANT_SAVE);
+    }
+  });
+
+  it("throws an error if the email couldn't be sent", async () => {
+    mockMailService.sendEmail.mockRejectedValueOnce(null);
+
+    expect.assertions(1);
+    try {
+      await createOrder(mockFareParam, mockCustomerParam);
+    } catch (error) {
+      expect(error).toBeTruthy();
     }
   });
 
@@ -74,6 +91,13 @@ describe('createOrder', () => {
     } catch (error) {
       expect(error).toBeFalsy();
     }
+  });
+
+  it('sends an email if order is valid', async () => {
+    prismaMock.order.create.mockResolvedValueOnce(mockDBOrder);
+
+    await createOrder(mockFareParam, mockCustomerParam);
+    expect(mockMailService.sendEmail).toBeCalled();
   });
 
   it('returns the order if valid', async () => {
@@ -170,11 +194,50 @@ describe('updateOrderStatus', () => {
   it("throws an error if order wasn't found", async () => {
     prismaMock.order.update.mockRejectedValueOnce(new Error());
 
+    expect.assertions(1);
     try {
       await updateOrderStatus(1, OrderStatus.PROCESSING);
     } catch (error) {
       expect(error).toBeTruthy();
     }
+  });
+
+  it("throws an error if mail wasn't sent", async () => {
+    prismaMock.order.update.mockResolvedValueOnce({
+      id: 1,
+      locFrom: 'a',
+      locTo: 'b',
+      date: new Date(),
+      price: 1,
+      status: OrderStatus.PROCESSING,
+      tax: 2,
+      customerId: 3,
+    });
+
+    mockMailService.sendEmail.mockRejectedValueOnce(null);
+
+    expect.assertions(1);
+    try {
+      await updateOrderStatus(1, OrderStatus.PROCESSING);
+    } catch (error) {
+      expect(error).toBeTruthy();
+    }
+  });
+
+  it('sends an email after successful update', async () => {
+    prismaMock.order.update.mockResolvedValueOnce({
+      id: 1,
+      locFrom: 'a',
+      locTo: 'b',
+      date: new Date(),
+      price: 1,
+      status: OrderStatus.PROCESSING,
+      tax: 2,
+      customerId: 3,
+    });
+
+    await updateOrderStatus(1, OrderStatus.PROCESSING);
+    expect(mockMailService.sendEmail).toBeCalled();
   });
 
   it('returns nothing on successful update', async () => {
