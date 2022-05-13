@@ -194,11 +194,50 @@ describe('updateOrderStatus', () => {
   it("throws an error if order wasn't found", async () => {
     prismaMock.order.update.mockRejectedValueOnce(new Error());
 
+    expect.assertions(1);
     try {
       await updateOrderStatus(1, OrderStatus.PROCESSING);
     } catch (error) {
       expect(error).toBeTruthy();
     }
+  });
+
+  it("throws an error if mail wasn't sent", async () => {
+    prismaMock.order.update.mockResolvedValueOnce({
+      id: 1,
+      locFrom: 'a',
+      locTo: 'b',
+      date: new Date(),
+      price: 1,
+      status: OrderStatus.PROCESSING,
+      tax: 2,
+      customerId: 3,
+    });
+
+    mockMailService.sendEmail.mockRejectedValueOnce(null);
+
+    expect.assertions(1);
+    try {
+      await updateOrderStatus(1, OrderStatus.PROCESSING);
+    } catch (error) {
+      expect(error).toBeTruthy();
+    }
+  });
+
+  it('sends an email after successful update', async () => {
+    prismaMock.order.update.mockResolvedValueOnce({
+      id: 1,
+      locFrom: 'a',
+      locTo: 'b',
+      date: new Date(),
+      price: 1,
+      status: OrderStatus.PROCESSING,
+      tax: 2,
+      customerId: 3,
+    });
+
+    await updateOrderStatus(1, OrderStatus.PROCESSING);
+    expect(mockMailService.sendEmail).toBeCalled();
   });
 
   it('returns nothing on successful update', async () => {

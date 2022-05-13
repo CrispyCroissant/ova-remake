@@ -3,7 +3,7 @@ import { BackendError } from '../../../shared/BackendError';
 import { ErrorCodes } from '../../../shared/enums';
 import { Customer, Fare } from '../../../shared/types';
 import prisma from '../config/prismaInstance';
-import { createMessage } from '../helpers/helpers';
+import { createMessage, createUpdateMsg } from '../helpers/helpers';
 import { OrderStatus } from '../types/orderStatuses';
 import { sendEmail } from './mailService';
 
@@ -36,7 +36,9 @@ async function createOrder(fare: Fare, customer: Customer): Promise<unknown> {
       },
     });
 
-    await sendEmail(createMessage(customer, fare, OrderStatus.STARTED));
+    await sendEmail(
+      createMessage(customer, fare, order.id, OrderStatus.STARTED)
+    );
 
     return order;
   } catch (err: unknown) {
@@ -84,7 +86,7 @@ async function updateOrderStatus(
   newStatus: OrderStatus
 ): Promise<void> {
   try {
-    await prisma.order.update({
+    const order = await prisma.order.update({
       where: {
         id: orderId,
       },
@@ -92,7 +94,15 @@ async function updateOrderStatus(
         status: newStatus,
       },
     });
+
+    await sendEmail(createUpdateMsg(order.id, newStatus), true);
   } catch (err: unknown) {
+    const error = err as BackendError;
+
+    if (error.HTTPStatus) {
+      throw error;
+    }
+
     throw new BackendError(
       400,
       ErrorCodes.ORDER_NOT_FOUND,
