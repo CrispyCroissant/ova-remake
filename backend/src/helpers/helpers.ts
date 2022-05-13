@@ -48,4 +48,11 @@ function createMessage(
 `;
 }
 
-export { priceCalc, createMessage };
+function createUpdateMsg(orderId: number, status: OrderStatus): string {
+  return `
+    ID: ${orderId}
+    Status: ${status}
+  `;
+}
+
+export { priceCalc, createMessage, createUpdateMsg };
