@@ -15,9 +15,6 @@ services:
       - ./src:/backend/src # TODO: Find a nice way to exclude test files
       - ./__test__:/backend/__test__ # TODO: Remove when above is fixed
       - /backend/node_modules
-    command: >
-      sh -c "npx prisma migrate dev --name init &&
-             npm run dev"
     restart: always
 
   pgadmin:
