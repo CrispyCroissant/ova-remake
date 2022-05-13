@@ -3,7 +3,7 @@ import { BackendError } from '../../../shared/BackendError';
 import { ErrorCodes } from '../../../shared/enums';
 import logger from '../config/logger';
 
-async function sendEmail(message: string): Promise<void> {
+async function sendEmail(message: string, isUpdate?: boolean): Promise<void> {
   // TODO: Update values to production-ready values when available.
   const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
@@ -19,7 +19,9 @@ async function sendEmail(message: string): Promise<void> {
     const info = await transporter.sendMail({
       from: 'Tester <test@test.com>',
       to: 'anyone@test.com',
-      subject: 'Beställning!',
+      subject: isUpdate
+        ? 'En beställning har uppdaterats!'
+        : 'En ny beställning har lagts!',
       text: message,
     });
 
