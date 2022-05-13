@@ -11,13 +11,17 @@ import prisma from '../config/prismaInstance';
 import { BackendError } from '../../../shared/BackendError';
 import { ErrorCodes } from '../../../shared/enums';
 import { OrderStatus } from '../types/orderStatuses';
+import * as mailService from './mailService';
 
 jest.mock('../config/prismaInstance', () => ({
   __esModule: true,
   default: mockDeep<PrismaClient>(),
 }));
 
+jest.mock('./mailService');
+
 const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>;
+const mockMailService = jest.mocked(mailService);
 
 describe('createOrder', () => {
   const mockFareParam: Fare = {
@@ -56,12 +60,24 @@ describe('createOrder', () => {
   it("throws an error if the order couldn't be saved", async () => {
     prismaMock.order.create.mockRejectedValueOnce(new Error());
 
+    expect.assertions(2);
     try {
       await createOrder(mockFareParam, mockCustomerParam);
     } catch (err: unknown) {
       const error = err as BackendError;
       expect(error.HTTPStatus).toBe(500);
       expect(error.errorCode).toBe(ErrorCodes.DB_CANT_SAVE);
+    }
+  });
+
+  it("throws an error if the email couldn't be sent", async () => {
+    mockMailService.sendEmail.mockRejectedValueOnce(null);
+
+    expect.assertions(1);
+    try {
+      await createOrder(mockFareParam, mockCustomerParam);
+    } catch (error) {
+      expect(error).toBeTruthy();
     }
   });
 
@@ -74,6 +90,11 @@ describe('createOrder', () => {
     } catch (error) {
       expect(error).toBeFalsy();
     }
+  });
+
+  it('sends an email if order is valid', async () => {
+    await createOrder(mockFareParam, mockCustomerParam);
+    expect(mockMailService.sendEmail).toBeCalled();
   });
 
   it('returns the order if valid', async () => {

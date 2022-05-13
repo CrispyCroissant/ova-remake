@@ -3,7 +3,9 @@ import { BackendError } from '../../../shared/BackendError';
 import { ErrorCodes } from '../../../shared/enums';
 import { Customer, Fare } from '../../../shared/types';
 import prisma from '../config/prismaInstance';
+import { createMessage } from '../helpers/helpers';
 import { OrderStatus } from '../types/orderStatuses';
+import { sendEmail } from './mailService';
 
 async function createOrder(fare: Fare, customer: Customer): Promise<unknown> {
   const { firstName, lastName, address, city, email, phone } = customer;
@@ -34,8 +36,16 @@ async function createOrder(fare: Fare, customer: Customer): Promise<unknown> {
       },
     });
 
+    await sendEmail(createMessage(customer, fare, OrderStatus.STARTED));
+
     return order;
   } catch (err: unknown) {
+    const error = err as BackendError;
+
+    if (error.HTTPStatus) {
+      throw error;
+    }
+
     throw new BackendError(
       500,
       ErrorCodes.DB_CANT_SAVE,
