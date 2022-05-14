@@ -15,6 +15,11 @@ describe('CTASection', () => {
     wrapper = mount(CTASection, {
       global: {
         plugins: [createTestingPinia()],
+        mocks: {
+          $router: {
+            push: jest.fn(),
+          },
+        },
       },
     });
   });
@@ -42,5 +47,18 @@ describe('CTASection', () => {
     const priceCard = wrapper.findComponent({ ref: 'priceCard' });
 
     expect(priceCard.exists()).toBe(true);
+  });
+
+  it('redirects to the ordering page on button click', async () => {
+    const locationFields = wrapper.findComponent(LocationInputFields);
+    locationFields.vm.$emit('fareFetched');
+
+    await wrapper.vm.$nextTick();
+
+    const orderBtn = wrapper.findComponent({ ref: 'orderBtn' });
+
+    await orderBtn.trigger('click');
+
+    expect(wrapper.vm.$router.push).toBeCalledWith({ path: 'bestall' });
   });
 });
