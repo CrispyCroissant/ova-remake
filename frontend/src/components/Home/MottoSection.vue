@@ -2,7 +2,7 @@
   <section
     class="flex column flex-center full-width bg-primary text-white big-y-pad"
   >
-    <div class="flex flex-center q-mb-md q-pr-">
+    <div class="flex flex-center q-mb-md q-pr-lg">
       <q-icon left name="mdi-engine" size="md"></q-icon>
       <p class="q-ma-none text-h5">Motorproblem?</p>
     </div>
