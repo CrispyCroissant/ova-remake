@@ -25,9 +25,21 @@
           <CardPrice ref="priceCard" v-if="hasFare" />
         </Transition>
         <div class="q-mt-lg flex justify-center">
-          <q-btn ref="submitBtn" color="primary" rounded type="submit">
-            Räkna
-          </q-btn>
+          <div class="q-mr-sm">
+            <q-btn ref="submitBtn" color="primary" rounded type="submit">
+              Räkna
+            </q-btn>
+          </div>
+          <div class="q-ml-sm" v-if="hasFare">
+            <q-btn
+              ref="orderBtn"
+              color="positive"
+              rounded
+              @click="$router.push({ path: 'bestall' })"
+            >
+              Beställ
+            </q-btn>
+          </div>
         </div>
       </q-form>
     </div>
@@ -54,6 +66,6 @@ const hasFare = ref(false);
 }
 .q-form {
   min-width: 25vw;
-  max-width: 50vw;
+  max-width: 100vw;
 }
 </style>
