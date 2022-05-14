@@ -1,43 +1,31 @@
 <template>
   <div class="flex justify-center">
     <q-card style="max-width: 40rem; min-width: 15rem">
-      <q-card-section class="q-pb-sm">
-        <p class="q-ma-none text-h6 text-primary">Pris</p>
-        <p id="total-dist" class="text-caption text-weight-light q-mb-none">
-          {{ Math.round(order.distance / 1000) }} km
-        </p>
+      <q-card-section class="q-pb-sm bg-primary">
+        <p class="q-ma-none text-h6 text-white text-center">Pris</p>
       </q-card-section>
 
-      <q-separator inset color="warning"></q-separator>
-
-      <q-card-section
-        class="q-pb-md"
-        v-for="(trip, index) in order.trips"
-        :key="trip.distance"
-      >
-        <div class="row justify-center">
-          <q-breadcrumbs align="evenly" separator-color="primary">
-            <template #separator>
-              <q-icon name="mdi-arrow-right" size="1.2rem"></q-icon>
-            </template>
-            <q-breadcrumbs-el
-              :label="from(trip.from, index)"
-            ></q-breadcrumbs-el>
-            <q-breadcrumbs-el :label="to(trip.to, index)"></q-breadcrumbs-el>
-            <p class="trip-dist text-caption q-ml-md q-mb-none">
-              {{ Math.round(trip.distance / 1000) }} km
-            </p>
-          </q-breadcrumbs>
+      <q-card-section class="q-pb-sm">
+        <div class="flex column flex-center q-mt-sm">
+          <p id="locs" class="q-mb-sm text-body2 text-center">
+            {{ location(order.from) }} - {{ location(order.to) }}
+          </p>
+          <p
+            id="total-dist"
+            class="text-caption text-weight-light text-center q-mb-none"
+          >
+            {{ Math.round(order.distance / 1000) }} km
+          </p>
         </div>
       </q-card-section>
 
-      <q-separator inset color="warning"></q-separator>
-
-      <q-card-section class="q-mt-sm">
+      <q-card-section>
         <div class="flex column flex-center">
-          <p id="price" class="text-body1">
-            <span class="text-primary">Totalt:</span>
+          <p id="price" class="text-h5 text-primary q-mb-none">
             {{ store.priceTotalFormatted }}
+          </p>
+          <p id="price" class="text-caption text-weight-light text-grey">
+            * inkl. moms
           </p>
         </div>
       </q-card-section>
@@ -53,13 +41,21 @@ import { formatLocation } from 'src/utils/utils';
 const store = useFrontEndStore();
 const { order } = storeToRefs(store);
 
-const START_LOCATION = 'Vårt garage';
+function location(location: string): string {
+  const maxLength = 15;
+  const formatted = formatLocation(location);
 
-function from(location: string, index: number): string {
-  return index === 0 ? START_LOCATION : formatLocation(location);
-}
-function to(location: string, index: number): string {
-  return index === 2 ? START_LOCATION : formatLocation(location);
+  if (formatted.length > maxLength) {
+    const withoutAddress = formatted.substring(formatted.indexOf(',') + 2);
+
+    if (withoutAddress.length > maxLength) {
+      return formatted.substring(formatted.lastIndexOf(',') + 1);
+    }
+
+    return withoutAddress;
+  }
+
+  return formatted;
 }
 </script>
 
