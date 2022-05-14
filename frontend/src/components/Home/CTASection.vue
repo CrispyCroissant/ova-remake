@@ -66,6 +66,6 @@ const hasFare = ref(false);
 }
 .q-form {
   min-width: 25vw;
-  max-width: 50vw;
+  max-width: 100vw;
 }
 </style>
