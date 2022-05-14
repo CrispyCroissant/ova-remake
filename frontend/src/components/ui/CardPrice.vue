@@ -46,7 +46,7 @@ function location(location: string): string {
   const formatted = formatLocation(location);
 
   if (formatted.length > maxLength) {
-    const withoutAddress = formatted.substring(formatted.indexOf(',') + 1);
+    const withoutAddress = formatted.substring(formatted.indexOf(',') + 2);
 
     if (withoutAddress.length > maxLength) {
       return formatted.substring(formatted.lastIndexOf(',') + 1);
