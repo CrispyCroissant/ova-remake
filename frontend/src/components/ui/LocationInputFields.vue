@@ -20,6 +20,7 @@
       :rules="[required]"
       :error="error"
       :loading="loading"
+      @blur="resetLocations"
       @input-value="inputHandler"
       :options="locations"
       @filter="filterLocations"
@@ -51,6 +52,7 @@
       :rules="[required]"
       :error="error"
       :loading="loading"
+      @blur="resetLocations"
       @input-value="inputHandler"
       :options="locations"
       @filter="filterLocations"
@@ -132,6 +134,7 @@ function inputHandler(input: string): void {
   getPredictions(input);
 }
 async function getPredictions(val: string): Promise<void> {
+  resetLocations();
 
   if (val.length <= 1) {
     return;
@@ -153,6 +156,9 @@ function filterLocations(
       (val) => val.toLocaleLowerCase().indexOf(needle) > -1
     );
   });
+}
+function resetLocations(): void {
+  locations.value = [];
 }
 
 defineExpose({ validate });
