@@ -8,7 +8,7 @@
     <q-select
       ref="fromInput"
       :class="props.withMargin ? 'q-my-md' : 'q-my-sm'"
-      :model-value="order.from"
+      v-model="order.from"
       use-input
       fill-input
       outlined
@@ -20,12 +20,7 @@
       :rules="[required]"
       :error="error"
       :loading="loading"
-      @input-value="
-        (val) => {
-          order.from = val;
-          getPredictions(val);
-        }
-      "
+      @input-value="inputHandler"
       :options="locations"
       @filter="filterLocations"
     >
@@ -44,7 +39,7 @@
     <q-select
       ref="toInput"
       :class="props.withMargin ? 'q-my-md' : 'q-my-sm'"
-      :model-value="order.to"
+      v-model="order.to"
       use-input
       fill-input
       outlined
@@ -56,12 +51,7 @@
       :rules="[required]"
       :error="error"
       :loading="loading"
-      @input-value="
-        (val) => {
-          order.to = val;
-          getPredictions(val);
-        }
-      "
+      @input-value="inputHandler"
       :options="locations"
       @filter="filterLocations"
     >
@@ -138,8 +128,10 @@ async function fetchResults(): Promise<void> {
 
 const locations = ref<string[]>([]);
 
-async function getPredictions(val: string) {
-  locations.value = [];
+function inputHandler(input: string): void {
+  getPredictions(input);
+}
+async function getPredictions(val: string): Promise<void> {
 
   if (val.length <= 1) {
     return;
