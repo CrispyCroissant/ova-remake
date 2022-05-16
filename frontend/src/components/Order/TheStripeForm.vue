@@ -2,7 +2,7 @@
   <form id="payment-form" @submit.prevent="handleSubmit">
     <div class="flex column flex-center q-pa-md">
       <h3 class="text-h5" v-if="!pageLoad">Betala</h3>
-      <q-spinner v-if="pageLoad" size="xl" color="accent"></q-spinner>
+      <q-spinner v-if="pageLoad" size="xl" color="warning"></q-spinner>
       <div id="payment-element"></div>
       <q-btn
         class="q-mt-lg"

@@ -2,8 +2,10 @@
   <q-stepper
     v-model="step"
     done-color="positive"
-    active-color="accent"
+    active-color="warning"
+    alternative-labels
     animated
+    flat
     :vertical="$q.screen.lt.sm"
   >
     <q-step
