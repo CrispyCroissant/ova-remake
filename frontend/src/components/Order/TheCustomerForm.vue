@@ -13,7 +13,7 @@
           ref="regNumInput"
           v-model="customer.regNumber"
           label="Organisationsnummer"
-          filled
+          outlined
           :rules="[required]"
           no-error-icon
           v-if="showRegField"
@@ -25,7 +25,7 @@
           ref="firstNameInput"
           v-model="customer.firstName"
           label="Förnamn"
-          filled
+          outlined
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
@@ -35,7 +35,7 @@
           ref="lastNameInput"
           v-model="customer.lastName"
           label="Efternamn"
-          filled
+          outlined
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
@@ -47,7 +47,7 @@
           ref="addressInput"
           v-model="customer.address"
           label="Adress"
-          filled
+          outlined
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
@@ -57,7 +57,7 @@
           ref="cityInput"
           v-model="customer.city"
           label="Ort"
-          filled
+          outlined
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
@@ -67,9 +67,10 @@
       <div class="row justify-center">
         <q-input
           ref="mailInput"
+          type="email"
           v-model="customer.email"
           label="E-postadress"
-          filled
+          outlined
           no-error-icon
           :rules="[required, validEmail]"
           class="q-my-sm"
@@ -78,9 +79,10 @@
         ></q-input>
         <q-input
           ref="mailConfirmInput"
+          type="email"
           v-model="emailConfirm"
           label="Bekräfta e-postadress"
-          filled
+          outlined
           no-error-icon
           :rules="[required, sameEmail]"
           class="q-my-sm"
@@ -90,9 +92,10 @@
       <div class="row justify-center">
         <q-input
           ref="phoneInput"
+          type="tel"
           v-model="customer.phone"
           label="Telefonnummer"
-          filled
+          outlined
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
