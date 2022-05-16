@@ -14,6 +14,7 @@
           v-model="customer.regNumber"
           label="Organisationsnummer"
           outlined
+          hide-bottom-space
           :rules="[required]"
           no-error-icon
           v-if="showRegField"
@@ -26,6 +27,7 @@
           v-model="customer.firstName"
           label="Förnamn"
           outlined
+          hide-bottom-space
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
@@ -36,6 +38,7 @@
           v-model="customer.lastName"
           label="Efternamn"
           outlined
+          hide-bottom-space
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
@@ -48,6 +51,7 @@
           v-model="customer.address"
           label="Adress"
           outlined
+          hide-bottom-space
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
@@ -58,6 +62,7 @@
           v-model="customer.city"
           label="Ort"
           outlined
+          hide-bottom-space
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
@@ -71,6 +76,7 @@
           v-model="customer.email"
           label="E-postadress"
           outlined
+          hide-bottom-space
           no-error-icon
           :rules="[required, validEmail]"
           class="q-my-sm"
@@ -83,6 +89,7 @@
           v-model="emailConfirm"
           label="Bekräfta e-postadress"
           outlined
+          hide-bottom-space
           no-error-icon
           :rules="[required, sameEmail]"
           class="q-my-sm"
@@ -96,6 +103,7 @@
           v-model="customer.phone"
           label="Telefonnummer"
           outlined
+          hide-bottom-space
           no-error-icon
           :rules="[required]"
           class="q-my-sm"
