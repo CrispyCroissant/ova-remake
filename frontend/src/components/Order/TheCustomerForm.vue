@@ -8,7 +8,7 @@
       @submit="validate"
       @validation-success="sendOrder"
     >
-      <div class="row justify-center">
+      <div class="row q-mb-lg">
         <q-input
           ref="regNumInput"
           v-model="customer.regNumber"
@@ -19,9 +19,11 @@
           no-error-icon
           v-if="showRegField"
           :error="hasError"
+          class="full-width"
+          dense
         ></q-input>
       </div>
-      <div class="row justify-center">
+      <div class="row justify-center q-my-md">
         <q-input
           ref="firstNameInput"
           v-model="customer.firstName"
@@ -30,9 +32,12 @@
           hide-bottom-space
           no-error-icon
           :rules="[required]"
-          class="q-my-sm"
+          class="full-width"
           :error="hasError"
+          dense
         ></q-input>
+      </div>
+      <div class="row justify-center q-my-md">
         <q-input
           ref="lastNameInput"
           v-model="customer.lastName"
@@ -41,11 +46,27 @@
           hide-bottom-space
           no-error-icon
           :rules="[required]"
-          class="q-my-sm"
+          class="full-width"
           :error="hasError"
+          dense
         ></q-input>
       </div>
-      <div class="row justify-center">
+      <div class="row justify-center q-mt-md q-mb-lg">
+        <q-input
+          ref="phoneInput"
+          type="tel"
+          v-model="customer.phone"
+          label="Telefonnummer"
+          outlined
+          hide-bottom-space
+          no-error-icon
+          :rules="[required]"
+          class="full-width"
+          :error="hasError"
+          dense
+        ></q-input>
+      </div>
+      <div class="row justify-center q-my-md">
         <q-input
           ref="addressInput"
           v-model="customer.address"
@@ -54,8 +75,9 @@
           hide-bottom-space
           no-error-icon
           :rules="[required]"
-          class="q-my-sm"
+          :class="properWidth"
           :error="hasError"
+          dense
         ></q-input>
         <q-input
           ref="cityInput"
@@ -65,11 +87,12 @@
           hide-bottom-space
           no-error-icon
           :rules="[required]"
-          class="q-my-sm"
+          :class="properWidth"
           :error="hasError"
+          dense
         ></q-input>
       </div>
-      <div class="row justify-center">
+      <div class="row justify-center q-my-md">
         <q-input
           ref="mailInput"
           type="email"
@@ -79,9 +102,10 @@
           hide-bottom-space
           no-error-icon
           :rules="[required, validEmail]"
-          class="q-my-sm"
+          :class="properWidth"
           lazy-rules
           :error="hasError"
+          dense
         ></q-input>
         <q-input
           ref="mailConfirmInput"
@@ -92,22 +116,9 @@
           hide-bottom-space
           no-error-icon
           :rules="[required, sameEmail]"
-          class="q-my-sm"
+          :class="properWidth"
           :error="hasError"
-        ></q-input>
-      </div>
-      <div class="row justify-center">
-        <q-input
-          ref="phoneInput"
-          type="tel"
-          v-model="customer.phone"
-          label="Telefonnummer"
-          outlined
-          hide-bottom-space
-          no-error-icon
-          :rules="[required]"
-          class="q-my-sm"
-          :error="hasError"
+          dense
         ></q-input>
       </div>
     </q-form>
@@ -172,6 +183,8 @@ async function sendOrder() {
     } catch (e) {}
   }
 }
+
+const properWidth = computed(() => ($q.screen.lt.sm ? 'full-width' : ''));
 
 defineExpose({ validate });
 </script>
