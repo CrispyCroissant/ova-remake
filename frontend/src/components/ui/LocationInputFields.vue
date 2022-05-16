@@ -8,7 +8,7 @@
     <q-select
       ref="fromInput"
       :class="props.withMargin ? 'q-my-md' : 'q-my-sm'"
-      :model-value="order.from"
+      v-model="order.from"
       use-input
       fill-input
       outlined
@@ -20,12 +20,8 @@
       :rules="[required]"
       :error="error"
       :loading="loading"
-      @input-value="
-        (val) => {
-          order.from = val;
-          getPredictions(val);
-        }
-      "
+      @blur="resetLocations"
+      @input-value="inputHandler"
       :options="locations"
       @filter="filterLocations"
     >
@@ -44,7 +40,7 @@
     <q-select
       ref="toInput"
       :class="props.withMargin ? 'q-my-md' : 'q-my-sm'"
-      :model-value="order.to"
+      v-model="order.to"
       use-input
       fill-input
       outlined
@@ -56,12 +52,8 @@
       :rules="[required]"
       :error="error"
       :loading="loading"
-      @input-value="
-        (val) => {
-          order.to = val;
-          getPredictions(val);
-        }
-      "
+      @blur="resetLocations"
+      @input-value="inputHandler"
       :options="locations"
       @filter="filterLocations"
     >
@@ -138,8 +130,11 @@ async function fetchResults(): Promise<void> {
 
 const locations = ref<string[]>([]);
 
-async function getPredictions(val: string) {
-  locations.value = [];
+function inputHandler(input: string): void {
+  getPredictions(input);
+}
+async function getPredictions(val: string): Promise<void> {
+  resetLocations();
 
   if (val.length <= 1) {
     return;
@@ -161,6 +156,9 @@ function filterLocations(
       (val) => val.toLocaleLowerCase().indexOf(needle) > -1
     );
   });
+}
+function resetLocations(): void {
+  locations.value = [];
 }
 
 defineExpose({ validate });
