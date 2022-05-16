@@ -122,7 +122,7 @@
         ></q-input>
       </div>
     </q-form>
-    <q-spinner color="accent" size="xl" v-if="loading"></q-spinner>
+    <q-spinner color="warning" size="xl" v-if="loading"></q-spinner>
   </div>
 </template>
 
