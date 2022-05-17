@@ -1,25 +1,38 @@
 # Öviks VägAssistance Website
 
-A website for the company Öviks VägAssistance.
+This is a website for the company Öviks VägAssistance. The website allows users to calculate the cost of a transport from point A to point B as well as ordering the transport. Also, it displays information about the company and its business.
+
+The backend has services for transport cost calculation, order management, integration with [Stripe](https://stripe.com), and email notifications.
+
+The frontend has a simple and intuitive UI which features core information that the company wants to show. This includes a home page with their own personal hero image and a CTA, their contact information, an ordering page and an "_about us_" page for those who are curious.
 
 ## Getting Started
 
 ### Dependencies
 
-- [Node v.16 or higher](https://nodejs.org/en/)
+- [Docker](https://www.docker.com/)
 
-### Installing
+### Setting up the development environment
 
-- Clone the repo.
+1. Clone the repo.
 
-- Install the npm packages in the following folders
+2. Go into the **backend** folder
+   1. Create a _.env_ file and provide the necessary environment variables (available below).
+   2. Run the command `make build` to build the docker image.
+   3. Run the command `make dev` to start the container.
+   4. Execute an interactive `sh` shell on the container and run `npx prisma migrate dev` to start the initial DB migration.
+3. Go into the **frontend** folder
+   1. Create a _.env_ file and provide the necessary environment variables (available below).
+   2. Run the command `make build` to build the docker image.
+   3. Run the command `make dev` to start the container.
 
-  - backend
-  - frontend
+#### Other
+* The Docker images are configured to allow for hot-reloading.
+* Frontend is by default available on port 9000.
+* Backend is by default available on port 3000.
+* pgAdmin is by default available on port 5555.
 
-- Set the environment variables listed below.
-
-#### Frontend environment variables
+### Frontend environment variables
 
 | **Key**          | **Description**                     |
 | ---------------- | ----------------------------------- |
@@ -27,7 +40,7 @@ A website for the company Öviks VägAssistance.
 | `STRIPE_API_KEY` | The publishable API key from Stripe |
 | `GOOGLE_API_KEY` | The API key from Google             |
 
-#### Backend environment variables
+### Backend environment variables
 
 | **Key**                 | **Description**                                        |
 | ----------------------- | ------------------------------------------------------ |
@@ -41,51 +54,45 @@ A website for the company Öviks VägAssistance.
 
 ### Usage
 
-- **Frontend**
+**Frontend**
 
-  - Starting the development server
+- Starting the development server silently
 
-    ```
-    quasar dev
-    ```
+  ```
+  make dev
+  ```
 
-  - Building the project files for production
+- Starting the development server (verbose)
 
-    ```
-    quasar build
-    ```
+  ```
+  make dev-v
+  ```
 
-  - Running unit tests
+- Running unit tests (inside container)
 
-    ```
-    npm run test:unit
-    ```
+  ```
+  npm run test:unit
+  ```
 
-  - Running the linter
+- Running the linter (inside container)
 
-    ```
-    npm run lint
-    ```
+  ```
+  npm run lint
+  ```
 
-- **Backend**
+**Backend**
 
-  - Starting the development server
+- Starting the development server silently
 
-    ```
-    npm run dev
-    ```
+  ```
+  make dev
+  ```
 
-  - Running unit tests
+- Running unit tests (inside container)
 
-    ```
-    npm run test
-    ```
-
-  - _Starting the production server_
-
-    ```
-    npm run start
-    ```
+  ```
+  npm run test
+  ```
 
 ## Authors
 
