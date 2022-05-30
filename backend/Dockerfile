@@ -17,11 +17,3 @@ RUN npx prisma generate
 RUN npm run build
 
 EXPOSE 3000
-
-
-FROM base as dev
-CMD [ "npm", "run", "dev" ]
-
-
-FROM base as production
-CMD ["npm", "start"] 

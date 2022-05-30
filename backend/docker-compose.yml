@@ -1,12 +1,12 @@
 version: '3'
 services:
   backend:
-    image: backend
+    image: ova:backend
     stdin_open: true
     build:
       context: .
       dockerfile: Dockerfile
-      target: dev
+      target: base
     depends_on:
       - postgres
     ports:
@@ -16,20 +16,6 @@ services:
       - ./__test__:/backend/__test__ # TODO: Remove when above is fixed
       - /backend/node_modules
     restart: always
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    depends_on:
-      - postgres
-    ports:
-      - '5555:80'
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    restart: unless-stopped
 
   postgres:
     image: postgres:latest
@@ -46,4 +32,3 @@ services:
 
 volumes:
   postgres-data:
-  pgadmin-data:
