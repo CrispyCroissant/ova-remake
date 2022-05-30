@@ -1,7 +1,7 @@
 version: '3'
 services:
   backend:
-    image: backend
+    image: ova:backend
     stdin_open: true
     build:
       context: .
